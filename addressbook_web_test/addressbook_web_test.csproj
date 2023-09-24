@@ -77,14 +77,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppMeneger\AlertHelper.cs" />
+    <Compile Include="AppMeneger\ContactHelper.cs" />
     <Compile Include="Model\AccountData.cs" />
     <Compile Include="AppMeneger\ApplicationManager.cs" />
     <Compile Include="AppMeneger\HelperBase.cs" />
     <Compile Include="Model\ContactData.cs" />
-    <Compile Include="Tests\Contacts\ContactBaseTest.cs" />
     <Compile Include="Tests\Contacts\ContactCreationTests.cs" />
     <Compile Include="Model\GroupData.cs" />
     <Compile Include="AppMeneger\GroupHelper.cs" />
+    <Compile Include="Tests\Contacts\ContactModificationTests.cs" />
+    <Compile Include="Tests\Contacts\ContactRemovalTests.cs" />
     <Compile Include="Tests\Groups\GroupModificationTests.cs" />
     <Compile Include="Tests\Groups\GroupRemovalTests.cs" />
     <Compile Include="AppMeneger\LoginHelper.cs" />

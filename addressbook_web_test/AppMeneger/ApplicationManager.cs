@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using addressbook_web_test.AppMeneger;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using System;
 
@@ -12,6 +13,8 @@ namespace AddressbookWebTest
         public LoginHelper LoginHelpers { get; private set; }
         public NavigationHelper NavigationHelper { get; private set; }
         public GroupHelper GroupHelper { get; private set; }
+        public ContactHelper ContactHelper { get; private set; }
+        public AlertHelper AlertHelper { get; private set; }
         public IWebDriver Driver { get { return driver; } }
         public String BaseURL { get { return baseURL; } }
         public ApplicationManager()
@@ -22,6 +25,8 @@ namespace AddressbookWebTest
             LoginHelpers = new LoginHelper(this);
             NavigationHelper = new NavigationHelper(this);
             GroupHelper = new GroupHelper(this);
+            ContactHelper = new ContactHelper(this);
+            AlertHelper = new AlertHelper(this);
         }
 
         public void Stop()
