@@ -30,7 +30,7 @@ namespace addressbook_web_test.AppMeneger
         public ContactHelper Modify(int index, ContactData contact)
         {
             _applicationManager.NavigationHelper.GoToHomePage();
-            InitContactModification();
+            InitContactModification(index);
             FillContractForm(contact);
             SubmitContractModification();
             ReturnContractPage();
@@ -55,13 +55,13 @@ namespace addressbook_web_test.AppMeneger
         }
         public ContactHelper SelectedContact(int index)
         {
-            _applicationManager.Driver.FindElement(By.Id($"{index}")).Click();
+            _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index}]/td[1]")).Click();
             return this;
         }
 
-        public ContactHelper InitContactModification()
+        public ContactHelper InitContactModification(int index)
         {
-            _applicationManager.Driver.FindElement(By.XPath("//img[@alt='Edit']")).Click();
+            _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index}]/td[8]")).Click();
             return this;
         }
 

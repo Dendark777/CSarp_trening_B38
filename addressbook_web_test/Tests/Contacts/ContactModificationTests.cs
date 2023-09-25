@@ -7,7 +7,7 @@ namespace AddressbookWebTest.Tests.Contacts
         [Test]
         public void ContactModificationTest()
         {
-            var contact = new ContactData(firstName: "Ivan", lastName: "Ivanov");
+            var contact = new ContactData(firstName: "Ivan2", lastName: "Ivanov2");
             _applicationManager.ContactHelper.Modify(1,contact);
         }
     }
