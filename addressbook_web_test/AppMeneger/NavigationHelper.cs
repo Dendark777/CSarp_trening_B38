@@ -13,11 +13,20 @@ namespace AddressbookWebTest
 
         public void GoToHomePage()
         {
+            if (_driver.Url == $"{_baseURL}")
+            {
+                return;
+            }
             _driver.Navigate().GoToUrl(_baseURL);
         }
 
         public void GoToGroupsPage()
         {
+            if (_driver.Url == $"{_baseURL}/group.php" &&
+                IsElementPresent(By.Name("New")))
+            {
+                return;
+            }
             _driver.FindElement(By.LinkText("groups")).Click();
         }
     }

@@ -19,7 +19,7 @@ namespace addressbook_web_test.AppMeneger
 
         public ContactHelper Create(ContactData contact)
         {
-            _applicationManager.NavigationHelper.GoToHomePage();
+            _applicationManager.Navigation.GoToHomePage();
             InitNewContractCreation();
             FillContractForm(contact);
             SubmitContractCreation();
@@ -29,7 +29,7 @@ namespace addressbook_web_test.AppMeneger
 
         public ContactHelper Modify(int index, ContactData contact)
         {
-            _applicationManager.NavigationHelper.GoToHomePage();
+            _applicationManager.Navigation.GoToHomePage();
             InitContactModification(index);
             FillContractForm(contact);
             SubmitContractModification();
@@ -40,10 +40,10 @@ namespace addressbook_web_test.AppMeneger
         public ContactHelper Remove(int index)
         {
             bool acceptNextAlert = true;
-            _applicationManager.NavigationHelper.GoToHomePage();
+            _applicationManager.Navigation.GoToHomePage();
             SelectedContact(index);
             RemoveContact();
-            Assert.IsTrue(Regex.IsMatch(_applicationManager.AlertHelper.CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
+            Assert.IsTrue(Regex.IsMatch(_applicationManager.Alert.CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
             ReturnContractPage();
             return this;
         }
@@ -67,12 +67,8 @@ namespace addressbook_web_test.AppMeneger
 
         public ContactHelper FillContractForm(ContactData contact)
         {
-            _applicationManager.Driver.FindElement(By.Name("firstname")).Click();
-            _applicationManager.Driver.FindElement(By.Name("firstname")).Clear();
-            _applicationManager.Driver.FindElement(By.Name("firstname")).SendKeys(contact.FirstName);
-            _applicationManager.Driver.FindElement(By.Name("lastname")).Click();
-            _applicationManager.Driver.FindElement(By.Name("lastname")).Clear();
-            _applicationManager.Driver.FindElement(By.Name("lastname")).SendKeys(contact.LastName);
+            Type(By.Name("firstname"), contact.FirstName);
+            Type(By.Name("lastname"), contact.LastName);
             return this;
         }
 

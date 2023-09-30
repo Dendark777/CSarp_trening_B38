@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
+using System.Reflection;
 
 namespace AddressbookWebTest
 {
@@ -11,7 +12,7 @@ namespace AddressbookWebTest
 
         public GroupHelper Create(GroupData group)
         {
-            _applicationManager.NavigationHelper.GoToGroupsPage();
+            _applicationManager.Navigation.GoToGroupsPage();
             InitNewGroupCreation();
             FillGroupForm(group);
             SubmitGroupCreation();
@@ -21,7 +22,7 @@ namespace AddressbookWebTest
 
         public GroupHelper Remove(int index)
         {
-            _applicationManager.NavigationHelper.GoToGroupsPage();
+            _applicationManager.Navigation.GoToGroupsPage();
             SelectedGroup(index);
             RemoveGroup();
             ReturnToGroupsPage();
@@ -30,14 +31,13 @@ namespace AddressbookWebTest
 
         internal GroupHelper Modify(int index, GroupData newData)
         {
-            _applicationManager.NavigationHelper.GoToGroupsPage();
+            _applicationManager.Navigation.GoToGroupsPage();
             SelectedGroup(index);
             InitGroupModification();
             FillGroupForm(newData);
             SubmitGroupModification();
             return this;
         }
-
 
         public GroupHelper InitNewGroupCreation()
         {
@@ -46,15 +46,12 @@ namespace AddressbookWebTest
         }
         public GroupHelper FillGroupForm(GroupData group)
         {
-            _driver.FindElement(By.Name("group_name")).Click();
-            _driver.FindElement(By.Name("group_name")).Clear();
-            _driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            _driver.FindElement(By.Name("group_header")).Clear();
-            _driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            _driver.FindElement(By.Name("group_footer")).Clear();
-            _driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+            Type(By.Name("group_name"), group.Name);
+            Type(By.Name("group_header"), group.Header);
+            Type(By.Name("group_footer"), group.Footer);
             return this;
         }
+
         public GroupHelper SubmitGroupCreation()
         {
             _driver.FindElement(By.XPath("//form[@action='/addressbook/group.php']")).Click();

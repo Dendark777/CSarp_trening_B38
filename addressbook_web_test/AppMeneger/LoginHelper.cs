@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System;
 
 namespace AddressbookWebTest
 {
@@ -10,20 +11,38 @@ namespace AddressbookWebTest
 
         public void Login(AccountData account)
         {
-            _driver.FindElement(By.Name("user")).Click();
-            _driver.FindElement(By.Name("user")).Clear();
-            _driver.FindElement(By.Name("user")).SendKeys(account.UserName);
-            _driver.FindElement(By.Id("LoginForm")).Click();
-            _driver.FindElement(By.Name("pass")).Click();
-            _driver.FindElement(By.Name("pass")).Clear();
-            _driver.FindElement(By.Name("pass")).SendKeys(account.Password);
-            _driver.FindElement(By.Id("LoginForm")).Click();
+            if (IsLoggedIn())
+            {
+                if (IsLoggedIn(account))
+                {
+                    return;
+                }
+                Logout();
+            }
+            Type(By.Name("user"), account.UserName);
+            Type(By.Name("pass"), account.Password);
             _driver.FindElement(By.XPath("//input[@value='Login']")).Click();
         }
 
         public void Logout()
         {
-            _driver.FindElement(By.LinkText("Logout")).Click();
+            if (IsLoggedIn())
+            {
+                _driver.FindElement(By.LinkText("Logout")).Click();
+            }
         }
+
+        public bool IsLoggedIn()
+        {
+            return IsElementPresent(By.Name("logout"));
+        }
+
+        public bool IsLoggedIn(AccountData account)
+        {
+            return IsLoggedIn() 
+                && _driver.FindElement(By.Name("logout")).FindElement(By.TagName("b")).Text == $"({account.UserName})";
+        }
+
+
     }
 }

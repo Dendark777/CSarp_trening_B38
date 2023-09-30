@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace AddressbookWebTest.Tests.Contacts
 {
     [TestFixture]
-    public class ContactRemovalTests : TestBase
+    public class ContactRemovalTests : AuthTestBase
     {
         [Test]
         public void ContactRemovalTest()
         {
-            _applicationManager.ContactHelper.Remove(1);
+            _applicationManager.Contact.Remove(1);
         }
     }
 }

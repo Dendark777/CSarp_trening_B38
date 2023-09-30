@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using System;
+using System.Threading;
 
 namespace AddressbookWebTest
 {
@@ -10,26 +11,40 @@ namespace AddressbookWebTest
         protected string baseURL;
         protected IWebDriver driver;
 
-        public LoginHelper LoginHelpers { get; private set; }
-        public NavigationHelper NavigationHelper { get; private set; }
-        public GroupHelper GroupHelper { get; private set; }
-        public ContactHelper ContactHelper { get; private set; }
-        public AlertHelper AlertHelper { get; private set; }
+        public LoginHelper Login { get; private set; }
+        public NavigationHelper Navigation { get; private set; }
+        public GroupHelper Group { get; private set; }
+        public ContactHelper Contact { get; private set; }
+        public AlertHelper Alert { get; private set; }
         public IWebDriver Driver { get { return driver; } }
         public String BaseURL { get { return baseURL; } }
-        public ApplicationManager()
+
+        private static  ThreadLocal<ApplicationManager> _instance = new ThreadLocal<ApplicationManager>();
+
+
+        public static ApplicationManager GetInstance()
+        {
+            if (!_instance.IsValueCreated)
+            {
+                var newInstance = new ApplicationManager();
+                newInstance.Navigation.GoToHomePage();
+                _instance.Value = newInstance;
+            }
+            return _instance.Value;
+        }
+
+        private ApplicationManager()
         {
             driver = new FirefoxDriver();
             baseURL = "http://localhost/addressbook";
 
-            LoginHelpers = new LoginHelper(this);
-            NavigationHelper = new NavigationHelper(this);
-            GroupHelper = new GroupHelper(this);
-            ContactHelper = new ContactHelper(this);
-            AlertHelper = new AlertHelper(this);
+            Login = new LoginHelper(this);
+            Navigation = new NavigationHelper(this);
+            Group = new GroupHelper(this);
+            Contact = new ContactHelper(this);
+            Alert = new AlertHelper(this);
         }
-
-        public void Stop()
+        ~ApplicationManager()
         {
             try
             {
