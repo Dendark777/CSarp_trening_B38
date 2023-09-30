@@ -30,6 +30,7 @@ namespace addressbook_web_test.AppMeneger
         public ContactHelper Modify(int index, ContactData contact)
         {
             _applicationManager.Navigation.GoToHomePage();
+            CheckAndCreate(index, contact);
             InitContactModification(index);
             FillContractForm(contact);
             SubmitContractModification();
@@ -41,12 +42,24 @@ namespace addressbook_web_test.AppMeneger
         {
             bool acceptNextAlert = true;
             _applicationManager.Navigation.GoToHomePage();
+            CheckAndCreate(index, new ContactData("Test","Testov"));
             SelectedContact(index);
             RemoveContact();
             Assert.IsTrue(Regex.IsMatch(_applicationManager.Alert.CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
             ReturnContractPage();
             return this;
         }
+
+        public ContactHelper CheckAndCreate(int index, ContactData newData)
+        {
+            if (!IsElementPresent(By.XPath($"//tr[@name='entry'][{index}]/td[1]")))
+            {
+                Create(newData);
+            }
+            return this;
+        }
+
+
 
         public ContactHelper InitNewContractCreation()
         {

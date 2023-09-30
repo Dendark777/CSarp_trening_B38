@@ -23,6 +23,7 @@ namespace AddressbookWebTest
         public GroupHelper Remove(int index)
         {
             _applicationManager.Navigation.GoToGroupsPage();
+            CheckAndCreate(index, new GroupData("TTT"));
             SelectedGroup(index);
             RemoveGroup();
             ReturnToGroupsPage();
@@ -32,12 +33,23 @@ namespace AddressbookWebTest
         internal GroupHelper Modify(int index, GroupData newData)
         {
             _applicationManager.Navigation.GoToGroupsPage();
+            CheckAndCreate(index, newData);
             SelectedGroup(index);
             InitGroupModification();
             FillGroupForm(newData);
             SubmitGroupModification();
             return this;
         }
+
+        public GroupHelper CheckAndCreate(int index, GroupData newData)
+        {
+            if (!IsElementPresent(By.XPath($"//div[@id='content']/form/span[{index}]/input")))
+            {
+                Create(newData);
+            }
+            return this;
+        }
+
 
         public GroupHelper InitNewGroupCreation()
         {
