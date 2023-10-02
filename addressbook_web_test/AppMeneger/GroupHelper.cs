@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace AddressbookWebTest
@@ -73,7 +74,7 @@ namespace AddressbookWebTest
 
         public GroupHelper SelectedGroup(int index)
         {
-            _driver.FindElement(By.XPath($"//div[@id='content']/form/span[{index}]/input")).Click();
+            _driver.FindElement(By.XPath($"//div[@id='content']/form/span[{index + 1}]/input")).Click();
             return this;
         }
         public GroupHelper RemoveGroup()
@@ -100,6 +101,18 @@ namespace AddressbookWebTest
 
             _driver.FindElement(By.Name("update")).Click();
             return this;
+        }
+
+        public List<GroupData> GetGroupList()
+        {
+            var groups = new List<GroupData>();
+            _applicationManager.Navigation.GoToGroupsPage();
+            var elements = _driver.FindElements(By.CssSelector("span.group"));
+            foreach (var element in elements)
+            {
+                groups.Add(new GroupData(element.Text));
+            }
+            return groups;
         }
     }
 }

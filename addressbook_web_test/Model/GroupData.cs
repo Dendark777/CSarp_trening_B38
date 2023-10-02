@@ -1,36 +1,54 @@
-﻿namespace AddressbookWebTest
-{
-    public class GroupData
-    {
-        private string _name;
-        private string _header = "";
-        private string _footer = "";
+﻿using System;
 
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-        public string Header
-        {
-            get { return _header; }
-            set { _header = value; }
-        }
-        public string Footer
-        {
-            get { return _footer; }
-            set { _footer = value; }
-        }
+namespace AddressbookWebTest
+{
+    public class GroupData : IEquatable<GroupData>, IComparable<GroupData>
+    {
+        public string Name { get; set; }
+        public string Header { get; set; } = "";
+        public string Footer { get; set; } = "";
         public GroupData(string name)
         {
-            _name = name;
+            Name = name;
         }
 
         public GroupData(string name, string header, string footer)
         {
-            _name = name;
-            _header = header;
-            _footer = footer;
+            Name = name;
+            Header = header;
+            Footer = footer;
+        }
+
+        public bool Equals(GroupData other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+            if (object.ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            return Name == other.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"Name={Name}";
+        }
+
+        public int CompareTo(GroupData other)
+        {
+            if (other is null)
+            {
+                return 1;
+            }
+            return Name.CompareTo(other.Name);
         }
     }
 }

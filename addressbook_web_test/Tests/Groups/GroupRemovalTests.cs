@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace AddressbookWebTest.Tests.Groups
 {
@@ -8,7 +9,15 @@ namespace AddressbookWebTest.Tests.Groups
         [Test]
         public void GroupRemovalTest()
         {
-            _applicationManager.Group.Remove(1);
+            List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
+
+            _applicationManager.Group.Remove(0);
+
+            List<GroupData> newGroupList = _applicationManager.Group.GetGroupList();
+            newGroupList.RemoveAt(0);
+            oldGroupList.Sort();
+            newGroupList.Sort();
+            Assert.AreEqual(oldGroupList, newGroupList);
         }
     }
 }

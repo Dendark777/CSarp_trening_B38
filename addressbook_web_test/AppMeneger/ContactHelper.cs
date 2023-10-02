@@ -42,7 +42,7 @@ namespace addressbook_web_test.AppMeneger
         {
             bool acceptNextAlert = true;
             _applicationManager.Navigation.GoToHomePage();
-            CheckAndCreate(index, new ContactData("Test","Testov"));
+            CheckAndCreate(index, new ContactData("Test", "Testov"));
             SelectedContact(index);
             RemoveContact();
             Assert.IsTrue(Regex.IsMatch(_applicationManager.Alert.CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
@@ -52,7 +52,7 @@ namespace addressbook_web_test.AppMeneger
 
         public ContactHelper CheckAndCreate(int index, ContactData newData)
         {
-            if (!IsElementPresent(By.XPath($"//tr[@name='entry'][{index}]/td[1]")))
+            if (!IsElementPresent(By.XPath($"//tr[@name='entry'][{index + 1}]/td[1]")))
             {
                 Create(newData);
             }
@@ -68,13 +68,13 @@ namespace addressbook_web_test.AppMeneger
         }
         public ContactHelper SelectedContact(int index)
         {
-            _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index}]/td[1]")).Click();
+            _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index + 1}]/td[1]")).Click();
             return this;
         }
 
         public ContactHelper InitContactModification(int index)
         {
-            _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index}]/td[8]")).Click();
+            _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index + 1}]/td[8]")).Click();
             return this;
         }
 
@@ -106,6 +106,18 @@ namespace addressbook_web_test.AppMeneger
         {
             _applicationManager.Driver.FindElement(By.LinkText("home")).Click();
             return this;
+        }
+
+        internal List<ContactData> GetContactList()
+        {
+            var contacts = new List<ContactData>();
+            _applicationManager.Navigation.GoToHomePage();
+            var elements = _driver.FindElements(By.XPath("//tr[@name='entry']"));
+            foreach (var element in elements)
+            {
+                contacts.Add(new ContactData(element.Text.Split()));
+            }
+            return contacts;
         }
     }
 }

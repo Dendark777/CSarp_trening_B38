@@ -1,8 +1,9 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using System;
 
 namespace AddressbookWebTest
 {
-    public class ContactData
+    public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
         public string FirstName { get; set; } = "";
         public string MiddleName { get; set; } = "";
@@ -35,6 +36,45 @@ namespace AddressbookWebTest
         {
             FirstName = firstName;
             LastName = lastName;
+        }
+
+        public ContactData(string[] row)
+        {
+            LastName = row[0];
+            FirstName = row[1];
+        }
+
+
+        public bool Equals(ContactData other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+            if (object.ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            return ToString() == other.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
+        public int CompareTo(ContactData other)
+        {
+            if (other is null)
+            {
+                return 1;
+            }
+            return ToString().CompareTo(other.ToString());
+        }
+
+        public override string ToString()
+        {
+            return $"{FirstName} {LastName}";
         }
     }
 }
