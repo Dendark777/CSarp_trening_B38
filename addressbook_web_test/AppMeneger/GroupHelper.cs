@@ -7,6 +7,8 @@ namespace AddressbookWebTest
 {
     public class GroupHelper : HelperBase
     {
+        private List<GroupData> _groupCache = null;
+
         public GroupHelper(ApplicationManager menager) : base(menager)
         {
         }
@@ -24,7 +26,6 @@ namespace AddressbookWebTest
         public GroupHelper Remove(int index)
         {
             _applicationManager.Navigation.GoToGroupsPage();
-            CheckAndCreate(index, new GroupData("TTT"));
             SelectedGroup(index);
             RemoveGroup();
             ReturnToGroupsPage();
@@ -34,17 +35,18 @@ namespace AddressbookWebTest
         internal GroupHelper Modify(int index, GroupData newData)
         {
             _applicationManager.Navigation.GoToGroupsPage();
-            CheckAndCreate(index, newData);
             SelectedGroup(index);
             InitGroupModification();
             FillGroupForm(newData);
             SubmitGroupModification();
+            ReturnToGroupsPage();
             return this;
         }
 
         public GroupHelper CheckAndCreate(int index, GroupData newData)
         {
-            if (!IsElementPresent(By.XPath($"//div[@id='content']/form/span[{index}]/input")))
+            ReturnToGroupsPage();
+            if (!IsElementPresent(By.XPath($"//div[@id='content']/form/span[{index + 1}]/input")))
             {
                 Create(newData);
             }
@@ -69,6 +71,7 @@ namespace AddressbookWebTest
         {
             _driver.FindElement(By.XPath("//form[@action='/addressbook/group.php']")).Click();
             _driver.FindElement(By.Name("submit")).Click();
+            _groupCache = null;
             return this;
         }
 
@@ -80,6 +83,7 @@ namespace AddressbookWebTest
         public GroupHelper RemoveGroup()
         {
             _driver.FindElement(By.Name("delete")).Click();
+            _groupCache = null;
             return this;
         }
 
@@ -100,19 +104,32 @@ namespace AddressbookWebTest
         {
 
             _driver.FindElement(By.Name("update")).Click();
+            _groupCache = null;
             return this;
         }
 
         public List<GroupData> GetGroupList()
         {
-            var groups = new List<GroupData>();
+            if (_groupCache != null)
+            {
+                return _groupCache;
+            }
+            _groupCache = new List<GroupData>();
             _applicationManager.Navigation.GoToGroupsPage();
             var elements = _driver.FindElements(By.CssSelector("span.group"));
             foreach (var element in elements)
             {
-                groups.Add(new GroupData(element.Text));
+                _groupCache.Add(new GroupData(element.Text)
+                {
+                    Id = element.FindElement(By.TagName("input")).GetAttribute("value")
+                });
             }
-            return groups;
+            return new List<GroupData>(_groupCache);
+        }
+
+        internal int GetGroupCount()
+        {
+            return _driver.FindElements(By.CssSelector("span.group")).Count;
         }
     }
 }

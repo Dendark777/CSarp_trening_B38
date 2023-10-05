@@ -12,6 +12,8 @@ namespace AddressbookWebTest.Tests.Contacts
             List<ContactData> oldContactList = _applicationManager.Contact.GetContactList();
 
             var contact = new ContactData(firstName: "Ivan2", lastName: "Ivanov2");
+            _applicationManager.Contact.CheckAndCreate(0, contact);
+
             _applicationManager.Contact.Modify(0, contact);
 
             List<ContactData> newContactList = _applicationManager.Contact.GetContactList();

@@ -13,6 +13,7 @@ namespace addressbook_web_test.AppMeneger
 {
     public class ContactHelper : HelperBase
     {
+        List<ContactData> _contacts = null;
         public ContactHelper(ApplicationManager menager) : base(menager)
         {
         }
@@ -30,7 +31,6 @@ namespace addressbook_web_test.AppMeneger
         public ContactHelper Modify(int index, ContactData contact)
         {
             _applicationManager.Navigation.GoToHomePage();
-            CheckAndCreate(index, contact);
             InitContactModification(index);
             FillContractForm(contact);
             SubmitContractModification();
@@ -42,7 +42,6 @@ namespace addressbook_web_test.AppMeneger
         {
             bool acceptNextAlert = true;
             _applicationManager.Navigation.GoToHomePage();
-            CheckAndCreate(index, new ContactData("Test", "Testov"));
             SelectedContact(index);
             RemoveContact();
             Assert.IsTrue(Regex.IsMatch(_applicationManager.Alert.CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
@@ -52,6 +51,7 @@ namespace addressbook_web_test.AppMeneger
 
         public ContactHelper CheckAndCreate(int index, ContactData newData)
         {
+            _applicationManager.Navigation.GoToHomePage();
             if (!IsElementPresent(By.XPath($"//tr[@name='entry'][{index + 1}]/td[1]")))
             {
                 Create(newData);
@@ -88,17 +88,20 @@ namespace addressbook_web_test.AppMeneger
         public ContactHelper SubmitContractCreation()
         {
             _applicationManager.Driver.FindElement(By.XPath("//div[@id='content']/form/input[21]")).Click();
+            _contacts = null;
             return this;
         }
 
         public ContactHelper SubmitContractModification()
         {
             _driver.FindElement(By.Name("update")).Click();
+            _contacts = null;
             return this;
         }
         public ContactHelper RemoveContact()
         {
             _driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            _contacts = null;
             return this;
         }
 
@@ -110,14 +113,18 @@ namespace addressbook_web_test.AppMeneger
 
         internal List<ContactData> GetContactList()
         {
-            var contacts = new List<ContactData>();
+            if (_contacts != null)
+            {
+                return _contacts;
+            }
+            _contacts = new List<ContactData>();
             _applicationManager.Navigation.GoToHomePage();
             var elements = _driver.FindElements(By.XPath("//tr[@name='entry']"));
             foreach (var element in elements)
             {
-                contacts.Add(new ContactData(element.Text.Split()));
+                _contacts.Add(new ContactData(element.Text.Split()));
             }
-            return contacts;
+            return new List<ContactData>(_contacts);
         }
     }
 }

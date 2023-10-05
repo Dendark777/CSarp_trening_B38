@@ -14,6 +14,7 @@ namespace AddressbookWebTest.Tests.Contacts
         public void ContactRemovalTest()
         {
             List<ContactData> oldContactList = _applicationManager.Contact.GetContactList();
+            _applicationManager.Contact.CheckAndCreate(0, new ContactData(firstName: "Ivan2", lastName: "Ivanov2"));
             _applicationManager.Contact.Remove(0);
 
             List<ContactData> newContactList = _applicationManager.Contact.GetContactList();
