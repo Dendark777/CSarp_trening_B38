@@ -73,7 +73,7 @@ namespace AddressbookWebTest
 
         public override string ToString()
         {
-            return $"{FirstName} {LastName}";
+            return $"Фамилия: {LastName} Имя: {FirstName}";
         }
     }
 }
