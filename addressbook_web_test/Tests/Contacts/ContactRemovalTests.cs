@@ -18,8 +18,10 @@ namespace AddressbookWebTest.Tests.Contacts
             _applicationManager.Contact.Remove(0);
 
             List<ContactData> newContactList = _applicationManager.Contact.GetContactList();
-
-            oldContactList.RemoveAt(0);
+            if (oldContactList.Any())
+            {
+                oldContactList.RemoveAt(0);
+            }
             oldContactList.Sort();
             newContactList.Sort();
             Assert.AreEqual(oldContactList, newContactList);

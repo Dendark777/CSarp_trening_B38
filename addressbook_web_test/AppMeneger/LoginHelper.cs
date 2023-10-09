@@ -39,10 +39,13 @@ namespace AddressbookWebTest
 
         public bool IsLoggedIn(AccountData account)
         {
-            return IsLoggedIn() 
-                && _driver.FindElement(By.Name("logout")).FindElement(By.TagName("b")).Text == $"({account.UserName})";
+            return IsLoggedIn()
+                && GetLoggetUserName() == account.UserName;
         }
 
-
+        private string GetLoggetUserName()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

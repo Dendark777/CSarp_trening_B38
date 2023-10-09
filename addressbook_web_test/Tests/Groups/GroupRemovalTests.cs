@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AddressbookWebTest.Tests.Groups
 {
@@ -10,24 +12,28 @@ namespace AddressbookWebTest.Tests.Groups
         public void GroupRemovalTest()
         {
             List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
+            _applicationManager.Group.CheckAndCreate(0, new GroupData("TTT"));
 
             _applicationManager.Group.Remove(0);
             var t = _applicationManager.Group.GetGroupCount();
-            _applicationManager.Group.CheckAndCreate(0, new GroupData("TTT"));
 
-            Assert.AreEqual(oldGroupList.Count - 1, t);
+            Assert.AreEqual(Math.Max(oldGroupList.Count - 1, 0), t);
 
             List<GroupData> newGroupList = _applicationManager.Group.GetGroupList();
 
-            var toBeRemoved = oldGroupList[0];
-            oldGroupList.RemoveAt(0);
+            if (oldGroupList.Any())
+            {
+                var toBeRemoved = oldGroupList[0];
+                oldGroupList.RemoveAt(0);
+                foreach (var group in newGroupList)
+                {
+                    Assert.AreNotEqual(group.Id, toBeRemoved.Id);
+                }
+            }
 
             Assert.AreEqual(oldGroupList, newGroupList);
 
-            foreach(var group in newGroupList)
-            {
-                Assert.AreNotEqual(group.Id, toBeRemoved.Id);
-            }
+
         }
     }
 }

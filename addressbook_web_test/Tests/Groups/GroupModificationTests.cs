@@ -10,9 +10,10 @@ namespace AddressbookWebTest.Tests.Groups
         public void GroupModificationTest()
         {
             var newData = new GroupData(name: "zzz", header: "ttt", footer: "qqq");
+            _applicationManager.Group.CheckAndCreate(0, newData);
+
             List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
             var oldData = oldGroupList[0];
-            _applicationManager.Group.CheckAndCreate(0, newData);
 
             _applicationManager.Group.Modify(0, newData);
             Assert.AreEqual(oldGroupList.Count, _applicationManager.Group.GetGroupCount());
@@ -36,9 +37,10 @@ namespace AddressbookWebTest.Tests.Groups
         public void GroupModificationTestHeaderNull()
         {
             var newData = new GroupData(name: "zzz1", header: null, footer: "qqq1");
+            _applicationManager.Group.CheckAndCreate(0, newData);
+
             List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
             var oldData = oldGroupList[0];
-            _applicationManager.Group.CheckAndCreate(0, newData);
 
             _applicationManager.Group.Modify(0, newData);
             Assert.AreEqual(oldGroupList.Count, _applicationManager.Group.GetGroupCount());
