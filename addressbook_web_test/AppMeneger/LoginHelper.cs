@@ -45,7 +45,8 @@ namespace AddressbookWebTest
 
         private string GetLoggetUserName()
         {
-            throw new NotImplementedException();
+            string text = _driver.FindElement(By.Name("logout")).FindElement(By.TagName("b")).Text;
+            return text.Substring(1, text.Length - 2);
         }
     }
 }
