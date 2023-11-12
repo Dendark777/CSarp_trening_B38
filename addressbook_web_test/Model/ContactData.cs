@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace AddressbookWebTest
 {
@@ -15,6 +16,32 @@ namespace AddressbookWebTest
         public string Home { get; set; } = "";
         public string Mobile { get; set; } = "";
         public string Work { get; set; } = "";
+        private string allPhones;
+        public string AllPhones
+        {
+            get
+            {
+                if (allPhones != null)
+                {
+                    return allPhones;
+                }
+                return $"{CleanUp(Home)}{CleanUp(Mobile)}{CleanUp(Work)}".Trim();
+            }
+            set
+            {
+                allPhones = value;
+            }
+        }
+
+        private string CleanUp(string phone)
+        {
+            if (string.IsNullOrEmpty(phone))
+            {
+                return "";
+            }
+            return $"{Regex.Replace(phone,"[ -()]","")}\r\n";
+        }
+
         public string Fax { get; set; } = "";
         public string Email { get; set; } = "";
         public string Email2 { get; set; } = "";

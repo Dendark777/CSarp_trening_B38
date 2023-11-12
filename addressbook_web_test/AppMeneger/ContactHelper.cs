@@ -126,5 +126,48 @@ namespace addressbook_web_test.AppMeneger
             }
             return new List<ContactData>(_contacts);
         }
+
+
+        public ContactData GetContactInformationFromTable(int index)
+        {
+            _applicationManager.Navigation.GoToHomePage();
+            IList<IWebElement> cells = _driver.FindElements(By.Name("entry"))[index].FindElements(By.TagName("td"));
+            string lastName = cells[1].Text;
+            string firstName = cells[2].Text;
+            string address = cells[3].Text;
+            string allPhones = cells[5].Text;
+            return new ContactData(firstName, lastName)
+            {
+                Address = address,
+                AllPhones = allPhones,
+            };
+        }
+
+        public ContactData GetContactInformationFromEditForm(int index)
+        {
+            _applicationManager.Navigation.GoToHomePage();
+            InitContactModification(index);
+            string firstName = _driver.FindElement(By.Name("firstname")).GetAttribute("value");
+            string lastName = _driver.FindElement(By.Name("lastname")).GetAttribute("value");
+            string address = _driver.FindElement(By.Name("address")).GetAttribute("value");
+            string homePhone = _driver.FindElement(By.Name("home")).GetAttribute("value");
+            string mobilePhone = _driver.FindElement(By.Name("mobile")).GetAttribute("value");
+            string WorkPhone = _driver.FindElement(By.Name("work")).GetAttribute("value");
+            return new ContactData(firstName, lastName)
+            {
+                Address = address,
+                Home = homePhone,
+                Mobile = mobilePhone,
+                Work = WorkPhone
+            };
+        }
+
+        public int GetNumberOfSearchResult()
+        {
+            _applicationManager.Navigation.GoToHomePage();
+            string text = _driver.FindElement(By.TagName("label")).Text;
+            Match m = new Regex(@"\d+").Match(text);
+            return int.Parse(m.Value);
+        }
     }
 }
