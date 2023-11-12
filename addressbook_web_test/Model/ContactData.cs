@@ -263,13 +263,6 @@ namespace AddressbookWebTest
             LastName = lastName;
         }
 
-        public ContactData(string[] row)
-        {
-            LastName = row[0];
-            FirstName = row[1];
-        }
-
-
         public bool Equals(ContactData other)
         {
             if (other is null)

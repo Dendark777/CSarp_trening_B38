@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace AddressbookWebTest.Tests.Groups
@@ -6,11 +7,9 @@ namespace AddressbookWebTest.Tests.Groups
     [TestFixture]
     public class GroupCreationTests : AuthTestBase
     {
-        [Test]
-        public void GroupCreationTest()
+        [Test, TestCaseSource("RandomGroupDataProvider")]
+        public void GroupCreationTest(GroupData group)
         {
-            var group = new GroupData(name: "aaa", header: "ddd", footer: "fff");
-
             List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
 
             _applicationManager.Group.Create(group);
@@ -24,22 +23,18 @@ namespace AddressbookWebTest.Tests.Groups
             Assert.AreEqual(oldGroupList, newGroupList);
         }
 
-        [Test]
-        public void EmptyGroupCreationTest()
+        public static IEnumerable<GroupData> RandomGroupDataProvider()
         {
-            var group = new GroupData(name: "", header: "", footer: "");
-
-            List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
-
-            _applicationManager.Group.Create(group);
-
-            Assert.AreEqual(oldGroupList.Count + 1, _applicationManager.Group.GetGroupCount());
-
-            List<GroupData> newGroupList = _applicationManager.Group.GetGroupList();
-            oldGroupList.Add(group);
-            oldGroupList.Sort();
-            newGroupList.Sort();
-            Assert.AreEqual(oldGroupList, newGroupList);
+            List<GroupData> groups = new List<GroupData>();
+            for (int i = 0; i < 5; i++)
+            {
+                groups.Add(new GroupData(GenerateRandomString(30))
+                {
+                    Header = GenerateRandomString(100),
+                    Footer = GenerateRandomString(100)
+                });
+            }
+            return groups;
         }
 
         [Test]

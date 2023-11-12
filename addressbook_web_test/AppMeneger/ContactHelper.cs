@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -126,9 +127,11 @@ namespace addressbook_web_test.AppMeneger
             _contacts = new List<ContactData>();
             _applicationManager.Navigation.GoToHomePage();
             var elements = _driver.FindElements(By.XPath("//tr[@name='entry']"));
-            foreach (var element in elements)
+            for (int i = 0; i < elements.Count; i++)
             {
-                _contacts.Add(new ContactData(element.Text.Split()));
+                var firstName = _driver.FindElement(By.XPath($"//tr[@name='entry'][{i + 1}]/td[3]")).Text;
+                var lastName = _driver.FindElement(By.XPath($"//tr[@name='entry'][{i + 1}]/td[2]")).Text;
+                _contacts.Add(new ContactData(firstName, lastName));
             }
             return new List<ContactData>(_contacts);
         }
