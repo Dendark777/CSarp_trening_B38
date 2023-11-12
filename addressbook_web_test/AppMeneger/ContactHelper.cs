@@ -4,6 +4,7 @@ using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -75,6 +76,11 @@ namespace addressbook_web_test.AppMeneger
         public ContactHelper InitContactModification(int index)
         {
             _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index + 1}]/td[8]")).Click();
+            return this;
+        }
+        public ContactHelper ContactDetail(int index)
+        {
+            _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index + 1}]/td[7]")).Click();
             return this;
         }
 
@@ -149,17 +155,45 @@ namespace addressbook_web_test.AppMeneger
             InitContactModification(index);
             string firstName = _driver.FindElement(By.Name("firstname")).GetAttribute("value");
             string lastName = _driver.FindElement(By.Name("lastname")).GetAttribute("value");
-            string address = _driver.FindElement(By.Name("address")).GetAttribute("value");
-            string homePhone = _driver.FindElement(By.Name("home")).GetAttribute("value");
-            string mobilePhone = _driver.FindElement(By.Name("mobile")).GetAttribute("value");
-            string WorkPhone = _driver.FindElement(By.Name("work")).GetAttribute("value");
             return new ContactData(firstName, lastName)
             {
-                Address = address,
-                Home = homePhone,
-                Mobile = mobilePhone,
-                Work = WorkPhone
+                MiddleName = _driver.FindElement(By.Name("middlename")).GetAttribute("value"),
+                Nickname = _driver.FindElement(By.Name("nickname")).GetAttribute("value"),
+                Company = _driver.FindElement(By.Name("company")).GetAttribute("value"),
+                Title = _driver.FindElement(By.Name("title")).GetAttribute("value"),
+                Address = _driver.FindElement(By.Name("address")).GetAttribute("value"),
+                Home = _driver.FindElement(By.Name("home")).GetAttribute("value"),
+                Mobile = _driver.FindElement(By.Name("mobile")).GetAttribute("value"),
+                Work = _driver.FindElement(By.Name("work")).GetAttribute("value"),
+                Fax = _driver.FindElement(By.Name("fax")).GetAttribute("value"),
+                Email = _driver.FindElement(By.Name("email")).GetAttribute("value"),
+                Email2 = _driver.FindElement(By.Name("email2")).GetAttribute("value"),
+                Email3 = _driver.FindElement(By.Name("email3")).GetAttribute("value"),
+                Homepage = _driver.FindElement(By.Name("homepage")).GetAttribute("value"),
+                BDay = _driver.FindElement(By.Name("bday")).GetAttribute("value"),
+                BMonth = _driver.FindElement(By.Name("bmonth")).GetAttribute("value"),
+                BYear = _driver.FindElement(By.Name("byear")).GetAttribute("value"),
+                ADay = _driver.FindElement(By.Name("aday")).GetAttribute("value"),
+                AMonth = _driver.FindElement(By.Name("amonth")).GetAttribute("value"),
+                AYear = _driver.FindElement(By.Name("ayear")).GetAttribute("value"),
+                SecondaryAddress = _driver.FindElement(By.Name("address2")).GetAttribute("value"),
+                SecondaryHome = _driver.FindElement(By.Name("phone2")).GetAttribute("value"),
+                SecondaryNotes = _driver.FindElement(By.Name("notes")).GetAttribute("value")
             };
+        }
+        public ContactData GetContactInformationFromDetail(int index)
+        {
+            _applicationManager.Navigation.GoToHomePage();
+            ContactDetail(index);
+            var content = _driver.FindElement(By.Id("content"));
+            var detailContact = content.Text.Split('\r', '\n');
+            string fullName = content.FindElement(By.TagName("b")).Text;
+            var contact = new ContactData()
+            {
+                FullName = fullName,
+                DetailInforamtion = detailContact,
+            };
+            return contact;
         }
 
         public int GetNumberOfSearchResult()
@@ -169,5 +203,6 @@ namespace addressbook_web_test.AppMeneger
             Match m = new Regex(@"\d+").Match(text);
             return int.Parse(m.Value);
         }
+
     }
 }
