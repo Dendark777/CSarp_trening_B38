@@ -16,7 +16,7 @@ namespace AddressbookTestDataGenerators
         private static Dictionary<string, IWriteModels> _models = new Dictionary<string, IWriteModels>()
         {
             { "group", new WriteGroups()},
-            { "contacts", new WriteGroups()}
+            { "contacts", new WriteContacts()}
 
         };
         private static Dictionary<string, IWriteToFile> _writeFormat = new Dictionary<string, IWriteToFile>()

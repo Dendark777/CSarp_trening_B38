@@ -15,10 +15,10 @@ namespace AddressbookTestDataGenerators.Model.WriteModel
     {
         public void WriteModels(int count, IWriteToFile writeToFile, StreamWriter writer)
         {
-            List<ContactData> groups = new();
+            List<ContactData> contacts = new();
             for (int i = 0; i < count; i++)
             {
-                groups.Add(new ContactData
+                contacts.Add(new ContactData
                 {
                     FirstName = TestBase.GenerateRandomString(10),
                     MiddleName = TestBase.GenerateRandomString(10),
@@ -27,7 +27,7 @@ namespace AddressbookTestDataGenerators.Model.WriteModel
                     Address = TestBase.GenerateRandomString(10)
                 });
             }
-            writeToFile.WriteModelsToFile(groups, writer);
+            writeToFile.WriteModelsToFile(contacts, writer);
         }
     }
 }
