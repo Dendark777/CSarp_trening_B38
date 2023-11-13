@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AddressbookTestDataGenerators": {
+      "commandName": "Project",
+      "commandLineArgs": "10 groupsGen.csv"
+    }
+  }
+}
