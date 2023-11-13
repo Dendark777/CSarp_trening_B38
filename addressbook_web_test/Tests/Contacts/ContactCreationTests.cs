@@ -1,16 +1,19 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace AddressbookWebTest.Tests.Contacts
 {
     [TestFixture]
     public class ContactCreationTests : AuthTestBase
     {
-        [Test, TestCaseSource("RandomContactDataProvider")]
+        [Test, TestCaseSource("ContactDataFromXmlFile")]
         public void ContactCreationTest(ContactData contact)
         {
             List<ContactData> oldContactList = _applicationManager.Contact.GetContactList();
@@ -37,6 +40,19 @@ namespace AddressbookWebTest.Tests.Contacts
             }
             return contacts;
         }
+
+        public static IEnumerable<ContactData> ContactDataFromXmlFile()
+        {
+            return (List<ContactData>)
+                new XmlSerializer(typeof(List<ContactData>))
+                .Deserialize(new StreamReader(@"contacts.xml"));
+        }
+
+        public static IEnumerable<ContactData> ContactDataFromJsonFile()
+        {
+            return JsonConvert.DeserializeObject<List<ContactData>>(File.ReadAllText(@"contacts.json"));
+        }
+
 
         [Test]
         public void ContactCreationTestNoParameter()

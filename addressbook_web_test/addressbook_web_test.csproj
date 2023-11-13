@@ -102,6 +102,9 @@
     <Compile Include="Tests\Groups\GroupCreationTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="contacts.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="groups.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -111,6 +114,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="contacts.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="groups.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
