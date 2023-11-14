@@ -10,15 +10,16 @@ namespace AddressbookWebTest.Tests.Contacts
         public void ContactModificationTest()
         {
 
-            var contact = new ContactData(firstName: "Ivan2", lastName: "Ivanov2");
-            _applicationManager.Contact.CheckAndCreate(0, contact);
+            var newContact = new ContactData(firstName: "Ivan2", lastName: "Ivanov2");
+            _applicationManager.Contact.CheckAndCreate(0, newContact);
 
-            List<ContactData> oldContactList = _applicationManager.Contact.GetContactList();
-            _applicationManager.Contact.Modify(0, contact);
+            List<ContactData> oldContactList = ContactData.GetAll();
+            var oldContact = oldContactList[0];
+            _applicationManager.Contact.Modify(oldContact, newContact);
 
-            List<ContactData> newContactList = _applicationManager.Contact.GetContactList();
+            List<ContactData> newContactList = ContactData.GetAll();
 
-            oldContactList[0] = contact;
+            oldContactList[0] = newContact;
             oldContactList.Sort();
             newContactList.Sort();
             Assert.AreEqual(oldContactList, newContactList);

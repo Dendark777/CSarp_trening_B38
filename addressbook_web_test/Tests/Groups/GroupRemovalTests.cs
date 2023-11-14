@@ -6,24 +6,24 @@ using System.Linq;
 namespace AddressbookWebTest.Tests.Groups
 {
     [TestFixture]
-    public class GroupRemovalTests : AuthTestBase
+    public class GroupRemovalTests : GroupTestBase
     {
         [Test]
         public void GroupRemovalTest()
         {
-            List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
+            List<GroupData> oldGroupList = GroupData.GetAll();
             _applicationManager.Group.CheckAndCreate(0, new GroupData("TTT"));
 
-            _applicationManager.Group.Remove(0);
-            var t = _applicationManager.Group.GetGroupCount();
+            GroupData toBeRemoved = oldGroupList[0];
+            _applicationManager.Group.Remove(toBeRemoved);
+            var t = GroupData.GetAll();
 
-            Assert.AreEqual(Math.Max(oldGroupList.Count - 1, 0), t);
+            Assert.AreEqual(Math.Max(oldGroupList.Count - 1, 0), t.Count);
 
-            List<GroupData> newGroupList = _applicationManager.Group.GetGroupList();
+            List<GroupData> newGroupList = GroupData.GetAll();
 
             if (oldGroupList.Any())
             {
-                var toBeRemoved = oldGroupList[0];
                 oldGroupList.RemoveAt(0);
                 foreach (var group in newGroupList)
                 {

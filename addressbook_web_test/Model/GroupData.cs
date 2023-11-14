@@ -1,13 +1,23 @@
-﻿using System;
+﻿using LinqToDB.Mapping;
+using NUnit.Framework;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using static LinqToDB.Sql;
 
 namespace AddressbookWebTest
 {
+    [Table(Name = "group_list")]
     public class GroupData : IEquatable<GroupData>, IComparable<GroupData>
     {
+        [Column(Name = "group_id"), PrimaryKey, Identity]
         public string Id { get; set; }
+        [Column(Name = "group_name")]
         public string Name { get; set; }
-        public string Header { get; set; } = "";
-        public string Footer { get; set; } = "";
+        [Column(Name = "group_header")]
+        public string Header { get; set; }
+        [Column(Name = "group_footer")]
+        public string Footer { get; set; }
         public GroupData()
         {
         }
@@ -53,6 +63,26 @@ namespace AddressbookWebTest
                 return 1;
             }
             return Name.CompareTo(other.Name);
+        }
+
+        public static List<GroupData> GetAll()
+        {
+            using (AddresBookDB db = new AddresBookDB())
+            {
+                return (from g in db.Groups select g).ToList();
+            }
+        }
+
+        public List<ContactData> GetContacts()
+        {
+            using (AddresBookDB db = new AddresBookDB())
+            {
+                return (from c in db.Contacts 
+                                from grc in db.GCR.Where(p=>p.GroupId == Id && 
+                                                            p.ContactId==c.Id &&
+                                                            c.Deprecated == "0000-00-00 00:00:00")
+                                select c).ToList();
+            }
         }
     }
 }

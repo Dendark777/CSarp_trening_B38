@@ -16,10 +16,10 @@ namespace AddressbookWebTest.Tests.Contacts
         [Test, TestCaseSource("ContactDataFromXmlFile")]
         public void ContactCreationTest(ContactData contact)
         {
-            List<ContactData> oldContactList = _applicationManager.Contact.GetContactList();
+            List<ContactData> oldContactList = ContactData.GetAll();
 
             _applicationManager.Contact.Create(contact);
-            List<ContactData> newContactList = _applicationManager.Contact.GetContactList();
+            List<ContactData> newContactList = ContactData.GetAll();
 
             oldContactList.Add(contact);
             oldContactList.Sort();
@@ -57,14 +57,14 @@ namespace AddressbookWebTest.Tests.Contacts
         [Test]
         public void ContactCreationTestNoParameter()
         {
-            List<ContactData> oldContactList = _applicationManager.Contact.GetContactList();
+            List<ContactData> oldContactList = ContactData.GetAll();
             ContactData contact = new ContactData(GenerateRandomString(30), GenerateRandomString(30))
             {
                 Company = GenerateRandomString(100),
                 Address = GenerateRandomString(100)
             };
             _applicationManager.Contact.Create(contact);
-            List<ContactData> newContactList = _applicationManager.Contact.GetContactList();
+            List<ContactData> newContactList = ContactData.GetAll();
 
             oldContactList.Add(contact);
             oldContactList.Sort();

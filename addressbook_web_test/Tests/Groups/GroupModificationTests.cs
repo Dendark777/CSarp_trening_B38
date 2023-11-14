@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace AddressbookWebTest.Tests.Groups
 {
     [TestFixture]
-    public class GroupModificationTests : AuthTestBase
+    public class GroupModificationTests : GroupTestBase
     {
         [Test]
         public void GroupModificationTest()
@@ -12,13 +12,14 @@ namespace AddressbookWebTest.Tests.Groups
             var newData = new GroupData(name: "zzz", header: "ttt", footer: "qqq");
             _applicationManager.Group.CheckAndCreate(0, newData);
 
-            List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
+            List<GroupData> oldGroupList = GroupData.GetAll();
+
             var oldData = oldGroupList[0];
 
-            _applicationManager.Group.Modify(0, newData);
+            _applicationManager.Group.Modify(oldData.Id, newData);
             Assert.AreEqual(oldGroupList.Count, _applicationManager.Group.GetGroupCount());
 
-            List<GroupData> newGroupList = _applicationManager.Group.GetGroupList();
+            List<GroupData> newGroupList = GroupData.GetAll();
             oldGroupList[0] = newData;
             oldGroupList.Sort();
             newGroupList.Sort();
@@ -33,19 +34,21 @@ namespace AddressbookWebTest.Tests.Groups
                 }
             }
         }
+
         [Test]
         public void GroupModificationTestHeaderNull()
         {
             var newData = new GroupData(name: "zzz1", header: null, footer: "qqq1");
             _applicationManager.Group.CheckAndCreate(0, newData);
 
-            List<GroupData> oldGroupList = _applicationManager.Group.GetGroupList();
+            List<GroupData> oldGroupList = GroupData.GetAll();
             var oldData = oldGroupList[0];
 
-            _applicationManager.Group.Modify(0, newData);
+            _applicationManager.Group.Modify(oldData.Id, newData);
+
             Assert.AreEqual(oldGroupList.Count, _applicationManager.Group.GetGroupCount());
 
-            List<GroupData> newGroupList = _applicationManager.Group.GetGroupList();
+            List<GroupData> newGroupList = GroupData.GetAll();
             oldGroupList[0] = newData;
             oldGroupList.Sort();
             newGroupList.Sort();

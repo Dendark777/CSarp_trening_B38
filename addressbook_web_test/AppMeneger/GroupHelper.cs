@@ -32,10 +32,33 @@ namespace AddressbookWebTest
             return this;
         }
 
-        internal GroupHelper Modify(int index, GroupData newData)
+        public GroupHelper Remove(GroupData group)
+        {
+            _applicationManager.Navigation.GoToGroupsPage();
+            SelectedGroup(group.Id);
+            RemoveGroup();
+            ReturnToGroupsPage();
+            return this;
+        }
+
+        public GroupHelper Modify(string index, GroupData newData)
         {
             _applicationManager.Navigation.GoToGroupsPage();
             SelectedGroup(index);
+            CommonModify(newData);
+            return this;
+        }
+
+        public GroupHelper Modify(int index, GroupData newData)
+        {
+            _applicationManager.Navigation.GoToGroupsPage();
+            SelectedGroup(index);
+            CommonModify(newData);
+            return this;
+        }
+
+        private GroupHelper CommonModify(GroupData newData)
+        {
             InitGroupModification();
             FillGroupForm(newData);
             SubmitGroupModification();
@@ -78,6 +101,11 @@ namespace AddressbookWebTest
         public GroupHelper SelectedGroup(int index)
         {
             _driver.FindElement(By.XPath($"//div[@id='content']/form/span[{index + 1}]/input")).Click();
+            return this;
+        }
+        public GroupHelper SelectedGroup(string id)
+        {
+            _driver.FindElement(By.XPath($"(//input[@name='selected[]' and @value='{id}'])")).Click();
             return this;
         }
         public GroupHelper RemoveGroup()

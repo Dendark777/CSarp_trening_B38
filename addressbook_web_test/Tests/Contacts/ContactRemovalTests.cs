@@ -13,11 +13,12 @@ namespace AddressbookWebTest.Tests.Contacts
         [Test]
         public void ContactRemovalTest()
         {
-            List<ContactData> oldContactList = _applicationManager.Contact.GetContactList();
+            List<ContactData> oldContactList = ContactData.GetAll();
             _applicationManager.Contact.CheckAndCreate(0, new ContactData(firstName: "Ivan2", lastName: "Ivanov2"));
-            _applicationManager.Contact.Remove(0);
+            ContactData toDelContact = oldContactList[0];
+            _applicationManager.Contact.Remove(toDelContact);
 
-            List<ContactData> newContactList = _applicationManager.Contact.GetContactList();
+            List<ContactData> newContactList = ContactData.GetAll();
             if (oldContactList.Any())
             {
                 oldContactList.RemoveAt(0);

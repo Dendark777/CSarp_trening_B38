@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using LinqToDB.Mapping;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,16 @@ using System.Text.RegularExpressions;
 
 namespace AddressbookWebTest
 {
+    [Table(Name = "addressbook")]
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
+        [Column(Name = "id"), PrimaryKey]
+        public string Id { get; set; }
+        [Column(Name = "firstname")]
         public string FirstName { get; set; }
+        [Column(Name = "middlename")]
         public string MiddleName { get; set; }
+        [Column(Name = "lastname")]
         public string LastName { get; set; }
         private string _fullName;
         public string FullName
@@ -30,14 +37,20 @@ namespace AddressbookWebTest
                 _fullName = value;
             }
         }
+        [Column(Name = "nickname")]
         public string Nickname { get; set; }
         public string Photo { get; set; }
+        [Column(Name = "title")]
         public string Title { get; set; }
+        [Column(Name = "company")]
         public string Company { get; set; }
+        [Column(Name = "address")]
         public string Address { get; set; }
         public string Home { get; set; }
         public string Mobile { get; set; }
         public string Work { get; set; }
+        [Column(Name = "deprecated")]
+        public string Deprecated { get; set; }
         private string _allPhones;
         public string AllPhones
         {
@@ -69,12 +82,12 @@ namespace AddressbookWebTest
         public string Email2 { get; set; }
         public string Email3 { get; set; }
         public string Homepage { get; set; }
-        public string BDay;
-        public string BMonth;
-        public string BYear;
-        public string ADay;
-        public string AMonth;
-        public string AYear;
+        public string BDay { get; set; }
+        public string BMonth { get; set; }
+        public string BYear { get; set; }
+        public string ADay { get; set; }
+        public string AMonth { get; set; }
+        public string AYear { get; set; }
         public string Group { get; set; }
         public string SecondaryAddress { get; set; }
         public string SecondaryHome { get; set; }
@@ -294,5 +307,13 @@ namespace AddressbookWebTest
         {
             return $"Фамилия: {LastName} Имя: {FirstName}";
         }
+        public static List<ContactData> GetAll()
+        {
+            using (AddresBookDB db = new AddresBookDB())
+            {
+                return (from g in db.Contacts.Where(c => c.Deprecated == "0000-00-00 00:00:00") select g).ToList();
+            }
+        }
+
     }
 }

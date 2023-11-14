@@ -1,6 +1,7 @@
 ﻿using AddressbookWebTest;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -34,17 +35,46 @@ namespace addressbook_web_test.AppMeneger
         {
             _applicationManager.Navigation.GoToHomePage();
             InitContactModification(index);
+            CommonModify(contact);
+            return this;
+        }
+
+        public ContactHelper Modify(ContactData oldContact, ContactData newContact)
+        {
+            _applicationManager.Navigation.GoToHomePage();
+            InitContactModification(oldContact);
+            CommonModify(newContact);
+            return this;
+        }
+
+        private ContactHelper CommonModify(ContactData contact)
+        {
             FillContractForm(contact);
             SubmitContractModification();
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
             ReturnContractPage();
             return this;
         }
 
         public ContactHelper Remove(int index)
         {
-            bool acceptNextAlert = true;
             _applicationManager.Navigation.GoToHomePage();
             SelectedContact(index);
+            CommonRemove();
+            return this;
+        }
+        public ContactHelper Remove(ContactData contact)
+        {
+            _applicationManager.Navigation.GoToHomePage();
+            SelectedContact(contact.Id);
+            CommonRemove();
+            return this;
+        }
+
+        private ContactHelper CommonRemove()
+        {
+            bool acceptNextAlert = true;
             RemoveContact();
             Assert.IsTrue(Regex.IsMatch(_applicationManager.Alert.CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
             ReturnContractPage();
@@ -77,6 +107,17 @@ namespace addressbook_web_test.AppMeneger
         public ContactHelper InitContactModification(int index)
         {
             _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index + 1}]/td[8]")).Click();
+            return this;
+        }
+        public ContactHelper InitContactModification(string index)
+        {
+            _applicationManager.Driver.FindElement(By.XPath($"//tr[@name='entry'][{index + 1}]/td[8]")).Click();
+            return this;
+        }
+        public ContactHelper InitContactModification(ContactData contact)
+        {
+            var element = _driver.FindElement(By.Id(contact.Id));
+            element.FindElement(By.XPath($"//../td[8]")).Click();
             return this;
         }
         public ContactHelper ContactDetail(int index)
@@ -207,5 +248,37 @@ namespace addressbook_web_test.AppMeneger
             return int.Parse(m.Value);
         }
 
+        public void AddContactToGroup(ContactData contact, GroupData group)
+        {
+            _applicationManager.Navigation.GoToHomePage();
+            ClearGroupFilter();
+            SelectedContact(contact.Id);
+            SelectGroupToAdd(group.Name);
+            CommitAddingContactToGroup();
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
+
+        private void CommitAddingContactToGroup()
+        {
+            _driver.FindElement(By.Name("add")).Click();
+        }
+
+        private void SelectedContact(string contactId)
+        {
+            _driver.FindElement(By.Id(contactId)).Click();
+
+        }
+
+        private void SelectGroupToAdd(string name)
+        {
+            new SelectElement(_driver.FindElement(By.Name("to_group"))).SelectByText(name);
+        }
+
+        private void ClearGroupFilter()
+        {
+            new SelectElement(_driver.FindElement(By.Name("group"))).SelectByText("[all]");
+        }
     }
 }
