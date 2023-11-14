@@ -20,6 +20,15 @@ namespace AddressbookWebTest
             _driver.Navigate().GoToUrl(_baseURL);
         }
 
+        public void GoToGroupContactList(string groupId)
+        {
+            if (_driver.Url == $"{_baseURL}")
+            {
+                return;
+            }
+            _driver.Navigate().GoToUrl($"{_baseURL}/?group={groupId}");
+        }
+
         public void GoToGroupsPage()
         {
             if (_driver.Url == $"{_baseURL}/group.php" &&

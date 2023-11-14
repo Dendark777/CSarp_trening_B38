@@ -51,8 +51,7 @@ namespace addressbook_web_test.AppMeneger
         {
             FillContractForm(contact);
             SubmitContractModification();
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
-                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+            WaitMsgBox();
             ReturnContractPage();
             return this;
         }
@@ -255,8 +254,7 @@ namespace addressbook_web_test.AppMeneger
             SelectedContact(contact.Id);
             SelectGroupToAdd(group.Name);
             CommitAddingContactToGroup();
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
-                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+            WaitMsgBox();
         }
 
 
@@ -279,6 +277,19 @@ namespace addressbook_web_test.AppMeneger
         private void ClearGroupFilter()
         {
             new SelectElement(_driver.FindElement(By.Name("group"))).SelectByText("[all]");
+        }
+
+        public void RemoveContactFromGroup(ContactData contact, GroupData group)
+        {
+            _applicationManager.Navigation.GoToGroupContactList(group.Id);
+            SelectedContact(contact.Id);
+            CommitDeltingContactFromGroup();
+            WaitMsgBox();
+        }
+
+        private void CommitDeltingContactFromGroup()
+        {
+            _driver.FindElement(By.Name("remove")).Click();
         }
     }
 }

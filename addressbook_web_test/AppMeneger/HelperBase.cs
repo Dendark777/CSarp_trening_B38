@@ -1,4 +1,6 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 
 namespace AddressbookWebTest
 {
@@ -33,5 +35,10 @@ namespace AddressbookWebTest
             }
         }
 
+        public void WaitMsgBox()
+        {
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
     }
 }
