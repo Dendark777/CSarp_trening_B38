@@ -54,9 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationManаgers\ApplicationManаger.cs" />
+    <Compile Include="ApplicationManаgers\ContactHelper.cs" />
     <Compile Include="ApplicationManаgers\GroupHelper.cs" />
     <Compile Include="ApplicationManаgers\HelperBase.cs" />
+    <Compile Include="Models\ContactData.cs" />
     <Compile Include="Models\GroupData.cs" />
+    <Compile Include="Tests\ContactTests\ContactCreationTests.cs" />
+    <Compile Include="Tests\ContactTests\ContactRemoveTests.cs" />
     <Compile Include="Tests\GroupTests\GroupCreationTests.cs" />
     <Compile Include="Tests\GroupTests\GroupRemoveTests.cs" />
     <Compile Include="Tests\TestBase.cs" />

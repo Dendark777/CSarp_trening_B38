@@ -14,13 +14,16 @@ namespace AddressBookTestsWhite.ApplicationManаgers
         public static string WINTITLE = "Free Address Book";
         public Window MainWindow { get; private set; }
         private readonly GroupHelper _groupHelper;
+        private readonly ContactHelper _contactHelper;
 
         public GroupHelper Groups => _groupHelper;
+        public ContactHelper Contacts => _contactHelper;
         public ApplicationManаger()
         {
             Application app = Application.Launch(@"C:\Devs\Courses\software_testing\FreeAddressBookPortable\AddressBook.exe");
             MainWindow = app.GetWindow(WINTITLE);
             _groupHelper = new GroupHelper(this);
+            _contactHelper = new ContactHelper(this);
         }
 
         public void Stop()
