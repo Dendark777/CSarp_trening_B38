@@ -89,11 +89,12 @@
     <Compile Include="AppManager\HelperBase.cs" />
     <Compile Include="AppManager\JamesHelper.cs" />
     <Compile Include="AppManager\MailHelper.cs" />
-    <Compile Include="AppManager\RegistrationHelper.cs" />
+    <Compile Include="AppManager\AccountHelper.cs" />
     <Compile Include="AppManager\TelnetInterface.cs" />
     <Compile Include="Models\AccountData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\AccountCreationTests.cs" />
+    <Compile Include="Tests\TaskCreationTests.cs" />
     <Compile Include="Tests\TestBase.cs" />
   </ItemGroup>
   <ItemGroup>

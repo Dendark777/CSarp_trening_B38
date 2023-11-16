@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace MantisTests.AppManager
 {
-    public class RegistrationHelper : HelperBase
+    public class AccountHelper : HelperBase
     {
-        public RegistrationHelper(ApplicationManager manager) : base(manager)
+        public AccountHelper(ApplicationManager manager) : base(manager)
         {
         }
 
@@ -48,7 +48,7 @@ namespace MantisTests.AppManager
 
         private void OpenMainPage()
         {
-            _applicationManager.Driver.Url = @"http://localhost/mantisbt-2.2.0/login_page.php";
+            _applicationManager.Driver.Url = @"http://localhost/mantisbt-2.26.0/login_page.php";
 
         }
 
