@@ -1,4 +1,5 @@
 ﻿using MantisTests.Models;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
@@ -16,15 +17,29 @@ namespace MantisTests.AppManager
         {
         }
 
-        internal void Register(AccountData account)
+        public void Register(AccountData account)
         {
-            OpenMainPage();
-            OpenRegistrationForm();
+            _applicationManager.Navigation.OpenRegistrationForm();
             FillRegistrationForm(account);
             SubmitRegistration();
             string url = GetConfirmationUrl(account);
             FillPasswordForm(url, account);
             SubmitPasswordForm();
+        }
+
+        
+        public void Login(AccountData account)
+        {
+            _applicationManager.Navigation.OpenPage();
+            FillLoginForm(account);
+        }
+
+        private void FillLoginForm(AccountData account)
+        {
+            _driver.FindElement(By.Id("username")).SendKeys(account.Name);
+            _driver.FindElement(By.ClassName("btn-success")).Click();
+            _driver.FindElement(By.Name("password")).SendKeys(account.Password);
+            _driver.FindElement(By.ClassName("btn-success")).Click();
         }
 
         private void SubmitPasswordForm()
@@ -34,7 +49,7 @@ namespace MantisTests.AppManager
 
         private void FillPasswordForm(string url, AccountData account)
         {
-            _driver.Url = url;
+            _applicationManager.Navigation.OpenPage(url);
             _driver.FindElement(By.Name("password")).SendKeys(account.Password);
             _driver.FindElement(By.Name("password_confirm")).SendKeys(account.Password);
         }
@@ -44,17 +59,6 @@ namespace MantisTests.AppManager
             string message = _applicationManager.Mail.GetLastMail(account);
             var match = Regex.Match(message, @"http://\S*");
             return match.Value;
-        }
-
-        private void OpenMainPage()
-        {
-            _applicationManager.Driver.Url = @"http://localhost/mantisbt-2.26.0/login_page.php";
-
-        }
-
-        private void OpenRegistrationForm()
-        {
-            _driver.FindElement(By.ClassName("back-to-login-link")).Click();
         }
 
 

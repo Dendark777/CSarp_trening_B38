@@ -37,6 +37,11 @@ namespace MantisTests.AppManager
             }
         }
 
+        protected void SubmitConfirmForm(string nameButton)
+        {
+            _driver.FindElement(By.XPath($"//input[@value='{nameButton}']")).Click();
+        }
+
         public void WaitMsgBox()
         {
             new WebDriverWait(_driver, TimeSpan.FromSeconds(10))

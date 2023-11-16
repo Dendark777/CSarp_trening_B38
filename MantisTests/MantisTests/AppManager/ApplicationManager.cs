@@ -18,6 +18,9 @@ namespace MantisTests.AppManager
         public FtpHelper Ftp { get; private set; }
         public JamesHelper James { get; private set; }
         public MailHelper Mail { get; private set; }
+        public NavigationHelper Navigation { get; private set; }
+        public TaskHelper Tasks { get; private set; }
+        internal ProjectHelper Projects { get; private set; }
 
         public static ApplicationManager GetInstance()
         {
@@ -33,11 +36,14 @@ namespace MantisTests.AppManager
         private ApplicationManager()
         {
             driver = new FirefoxDriver();
-            baseURL = "http://localhost";
+            baseURL = "http://localhost/mantisbt-2.26.0";
             Account = new AccountHelper(this);
             Ftp = new FtpHelper(this);
             James = new JamesHelper(this);
             Mail = new MailHelper(this);
+            Navigation = new NavigationHelper(this);
+            Tasks = new TaskHelper(this);
+            Projects = new ProjectHelper(this);
         }
         ~ApplicationManager()
         {
