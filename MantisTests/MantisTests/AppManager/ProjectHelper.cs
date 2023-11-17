@@ -27,11 +27,19 @@ namespace MantisTests.AppManager
             SelectProject(project.Name);
         }
 
+        public void CreateProjectWithoutCheck(string projectName)
+        {
+            _applicationManager.Navigation.OpenPage($"{_applicationManager.BaseURL}/manage_proj_create_page.php");
+            _driver.FindElement(By.Id("project-name")).SendKeys(projectName);
+            SubmitConfirmForm("Добавить проект");
+            SelectProject(projectName);
+        }
+
         public void RemoveProject(ProjectData project)
         {
             if (!CheckProjectExist(project))
             {
-                CreateProject(project);
+                CreateProjectWithoutCheck(project.Name);
             }
             _applicationManager.Navigation.OpenPage($"{_applicationManager.BaseURL}/manage_proj_page.php");
             OpenProjectDialog(project);
@@ -50,10 +58,17 @@ namespace MantisTests.AppManager
         {
             try
             {
-                _driver.FindElement(By.Id("dropdown_projects_menu")).Click();
-                _driver.FindElement(By.XPath("//ul[@id='projects-list']/li[3]/div/ul/li/a")).Click();
-                SelectProject(project.Name);
-                return true;
+                _applicationManager.Navigation.OpenPage($"{_applicationManager.BaseURL}/manage_proj_page.php");
+
+                var tBody = _driver.FindElement(By.XPath("//div[@id='main-container']/div[2]/div[2]/div/div/div[2]/div[2]/div/div[2]/table/tbody"));
+                var rows = tBody.FindElements(By.TagName("tr"));
+                List<string> names = new List<string>();
+                foreach ( var row in rows )
+                {
+                    var cell = row.FindElements(By.TagName("td"))[0];
+                    names.Add(cell.Text);
+                }
+                return names.Contains(project.Name);
             }
             catch (NoSuchElementException)
             {
