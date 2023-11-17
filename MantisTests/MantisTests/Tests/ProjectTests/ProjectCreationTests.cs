@@ -33,8 +33,10 @@ namespace MantisTests.Tests.ProjectTests
         public void ProjectCreationTestCheckApi()
         {
             var oldProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
+            var existingProject = oldProjectList.FirstOrDefault(p=>p.Name == _project.Name);
+            Assert.True(existingProject == null);
 
-            _applicationManager.Projects.CreateProject(_project);
+            _applicationManager.Projects.CreateProjectWithoutCheck(_project);
 
             var newProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
             oldProjectList.Add(_project);

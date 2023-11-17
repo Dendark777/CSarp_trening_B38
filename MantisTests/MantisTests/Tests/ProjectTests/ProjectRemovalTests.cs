@@ -36,7 +36,7 @@ namespace MantisTests.Tests.ProjectTests
                 oldProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
             }
             var project = oldProjectList.FirstOrDefault();
-            _applicationManager.Projects.RemoveProject(project);
+            _applicationManager.Projects.RemoveProjectWithoutCheck(project);
 
             var newProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
             oldProjectList.Remove(project);
