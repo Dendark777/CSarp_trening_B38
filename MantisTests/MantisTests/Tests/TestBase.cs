@@ -9,18 +9,12 @@ namespace MantisTests.Tests
     public class TestBase
     {
         public static bool PERFORM_LONG_UI_CHECKS = true;
-        protected AccountData _adminAccount;
         protected ApplicationManager _applicationManager;
         private static Random _rnd = new Random();
         [TestFixtureSetUp]
         public void SetupApplicationManager()
         {
             _applicationManager = ApplicationManager.GetInstance();
-            _adminAccount = new AccountData()
-            {
-                Name = "administrator",
-                Password = "root"
-            };
         }
 
         public static string GenerateRandomString(int max)

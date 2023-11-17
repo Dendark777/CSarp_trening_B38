@@ -87,6 +87,5 @@ namespace MantisTests.AppManager
             }
             return index;
         }
-
     }
 }

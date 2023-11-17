@@ -67,5 +67,21 @@ namespace MantisTests.AppManager
             _driver.FindElement(By.LinkText(projectName)).Click();
         }
 
+        public List<ProjectData> GetProjectsFromApi(AccountData account)
+        {
+            Mantis.MantisConnectPortTypeClient client = new Mantis.MantisConnectPortTypeClient();
+            var projects = client.mc_projects_get_user_accessible(account.Name, account.Password);
+            return projects.Select(x => new ProjectData { Name = x.name }).ToList();
+        }
+
+        public void CreateProjectFromApi(AccountData account, ProjectData project)
+        {
+            Mantis.MantisConnectPortTypeClient client = new Mantis.MantisConnectPortTypeClient();
+            Mantis.ProjectData mProject = new Mantis.ProjectData()
+            {
+                name = project.Name
+            };
+            client.mc_project_add(account.Name, account.Password, mProject);
+        }
     }
 }

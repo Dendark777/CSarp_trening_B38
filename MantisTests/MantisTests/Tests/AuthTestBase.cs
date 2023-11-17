@@ -11,6 +11,15 @@ namespace MantisTests.Tests
 {
     public class AuthTestBase : TestBase
     {
+        protected AccountData _adminAccount;
+        public AuthTestBase()
+        {
+            _adminAccount = new AccountData()
+            {
+                Name = "administrator",
+                Password = "root"
+            };
+        }
         [SetUp]
         public void Login()
         {

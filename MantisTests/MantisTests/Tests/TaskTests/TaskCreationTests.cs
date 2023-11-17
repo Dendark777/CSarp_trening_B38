@@ -1,4 +1,5 @@
-﻿using MantisTests.Models;
+﻿using MantisTests.Mantis;
+using MantisTests.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,20 +12,27 @@ namespace MantisTests.Tests.TaskTests
     [TestFixture]
     public class TaskCreationTests : AuthTestBase
     {
-        [Test]
-        public void TaskCreationTest()
-        {
+        private Models.ProjectData _project;
+        private TaskData _task;
 
-            ProjectData project = new ProjectData()
+        [SetUp]
+        public void CreateData()
+        {
+            _project = new Models.ProjectData()
             {
                 Name = "TestProject",
             };
-            TaskData task = new TaskData()
+            _task = new TaskData()
             {
                 Summary = "Test",
                 Description = "Test"
             };
-            var idTask = _applicationManager.Tasks.CreateTask(task, project);
+        }
+
+        [Test]
+        public void TaskCreationTest()
+        {
+            var idTask = _applicationManager.Tasks.CreateTask(_task, _project);
             Assert.False(_applicationManager.Tasks.CheckTask(idTask));
         }
     }

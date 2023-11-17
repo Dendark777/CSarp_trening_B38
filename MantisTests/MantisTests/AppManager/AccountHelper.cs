@@ -26,7 +26,6 @@ namespace MantisTests.AppManager
             FillPasswordForm(url, account);
             SubmitPasswordForm();
         }
-
         
         public void Login(AccountData account)
         {
@@ -60,7 +59,6 @@ namespace MantisTests.AppManager
             var match = Regex.Match(message, @"http://\S*");
             return match.Value;
         }
-
 
         private void FillRegistrationForm(AccountData account)
         {

@@ -22,5 +22,27 @@ namespace MantisTests.Tests.ProjectTests
             _applicationManager.Projects.RemoveProject(project);
             Assert.False(_applicationManager.Projects.CheckProjectExist(project));
         }
+
+        [Test]
+        public void ProjectRemovalTestCheckApi()
+        {
+            var oldProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
+            if (!oldProjectList.Any()) 
+            {
+                _applicationManager.Projects.CreateProjectFromApi(_adminAccount, new ProjectData
+                {
+                    Name = "project test"
+                });
+                oldProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
+            }
+            var project = oldProjectList.FirstOrDefault();
+            _applicationManager.Projects.RemoveProject(project);
+
+            var newProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
+            oldProjectList.Remove(project);
+            oldProjectList.Sort();
+            newProjectList.Sort();
+            Assert.AreEqual(oldProjectList, newProjectList);
+        }
     }
 }

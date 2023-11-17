@@ -11,16 +11,36 @@ namespace MantisTests.Tests.ProjectTests
     [TestFixture]
     internal class ProjectCreationTests : AuthTestBase
     {
+        private Models.ProjectData _project;
+
+        [SetUp]
+        public void CreateData()
+        {
+            _project = new Models.ProjectData()
+            {
+                Name = "TestProject5",
+            };
+        }
+
         [Test]
         public void ProjectCreationTest()
         {
+            _applicationManager.Projects.CreateProject(_project);
+            Assert.True(_applicationManager.Projects.CheckProjectExist(_project));
+        }
 
-            ProjectData project = new ProjectData()
-            {
-                Name = "TestProject2",
-            };
-            _applicationManager.Projects.CreateProject(project);
-            Assert.True(_applicationManager.Projects.CheckProjectExist(project));
+        [Test]
+        public void ProjectCreationTestCheckApi()
+        {
+            var oldProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
+
+            _applicationManager.Projects.CreateProject(_project);
+
+            var newProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
+            oldProjectList.Add(_project);
+            oldProjectList.Sort();
+            newProjectList.Sort();
+            Assert.AreEqual(oldProjectList, newProjectList);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace MantisTests.AppManager
         public NavigationHelper Navigation { get; private set; }
         public TaskHelper Tasks { get; private set; }
         internal ProjectHelper Projects { get; private set; }
+        public APIHelper Api { get; private set; }
 
         public static ApplicationManager GetInstance()
         {
@@ -44,6 +45,7 @@ namespace MantisTests.AppManager
             Navigation = new NavigationHelper(this);
             Tasks = new TaskHelper(this);
             Projects = new ProjectHelper(this);
+            Api = new APIHelper(this);
         }
         ~ApplicationManager()
         {
