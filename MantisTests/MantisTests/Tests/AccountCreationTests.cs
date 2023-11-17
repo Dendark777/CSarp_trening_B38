@@ -25,17 +25,20 @@ namespace MantisTests.Tests
         [Test]
         public void AccountRegistrtionTest()
         {
+            string guid = Guid.NewGuid().ToString();
             AccountData account = new AccountData()
             {
-                Name = "Test7",
+                Name = guid,
                 Password = "password",
-                Email = "Test7@localhost.localdomain",
+                Email = $"{guid}@localhost.localdomain",
             };
 
             _applicationManager.James.Delete(account);
             _applicationManager.James.Add(account);
 
             _applicationManager.Account.Register(account);
+
+            Assert.True(_applicationManager.Account.CheckAccount(account));
         }
 
         [TestFixtureTearDown]

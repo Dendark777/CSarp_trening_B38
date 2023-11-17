@@ -3,6 +3,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -31,6 +32,33 @@ namespace MantisTests.AppManager
         {
             _applicationManager.Navigation.OpenPage();
             FillLoginForm(account);
+        }
+
+        public bool CheckAccount(AccountData account)
+        {
+            try
+            {
+                Login(new AccountData
+                {
+                    Name = "administrator",
+                    Password="root"
+                });
+                _applicationManager.Navigation.OpenPage($"{_applicationManager.BaseURL}/manage_user_page.php");
+
+                var tBody = _driver.FindElement(By.XPath("//div[@id='main-container']/div[2]/div[2]/div/div/div[4]/div[2]/div[2]/div/table/tbody"));
+                var rows = tBody.FindElements(By.TagName("tr"));
+                List<string> names = new List<string>();
+                foreach (var row in rows)
+                {
+                    var cell = row.FindElements(By.TagName("td"))[0];
+                    names.Add(cell.Text);
+                }
+                return names.Contains(account.Name);
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
         }
 
         private void FillLoginForm(AccountData account)
@@ -71,5 +99,6 @@ namespace MantisTests.AppManager
         {
             _driver.FindElement(By.CssSelector("input.btn")).Click();
         }
+
     }
 }
