@@ -116,7 +116,7 @@ namespace addressbook_web_test.AppMeneger
         public ContactHelper InitContactModification(ContactData contact)
         {
             var element = _driver.FindElement(By.Id(contact.Id));
-            element.FindElement(By.XPath($"//../td[8]")).Click();
+            element.FindElement(By.XPath($"./../../td[8]")).Click();
             return this;
         }
         public ContactHelper ContactDetail(int index)
