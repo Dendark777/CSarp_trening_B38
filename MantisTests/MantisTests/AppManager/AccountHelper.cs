@@ -27,7 +27,7 @@ namespace MantisTests.AppManager
             FillPasswordForm(url, account);
             SubmitPasswordForm();
         }
-        
+
         public void Login(AccountData account)
         {
             _applicationManager.Navigation.OpenPage();
@@ -36,29 +36,8 @@ namespace MantisTests.AppManager
 
         public bool CheckAccount(AccountData account)
         {
-            try
-            {
-                Login(new AccountData
-                {
-                    Name = "administrator",
-                    Password="root"
-                });
-                _applicationManager.Navigation.OpenPage($"{_applicationManager.BaseURL}/manage_user_page.php");
-
-                var tBody = _driver.FindElement(By.XPath("//div[@id='main-container']/div[2]/div[2]/div/div/div[4]/div[2]/div[2]/div/table/tbody"));
-                var rows = tBody.FindElements(By.TagName("tr"));
-                List<string> names = new List<string>();
-                foreach (var row in rows)
-                {
-                    var cell = row.FindElements(By.TagName("td"))[0];
-                    names.Add(cell.Text);
-                }
-                return names.Contains(account.Name);
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
+            Login(account);
+            return IsElementPresent(By.LinkText("Создать задачу"));
         }
 
         private void FillLoginForm(AccountData account)

@@ -1,6 +1,7 @@
 ﻿using MantisTests.AppManager;
 using MantisTests.Models;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using System;
 using System.Text;
 
@@ -26,6 +27,19 @@ namespace MantisTests.Tests
                 sb.Append(Convert.ToChar(32 + _rnd.Next(66)));
             }
             return sb.ToString();
+        }
+
+        protected bool IsElementPresent(By by)
+        {
+            try
+            {
+                _applicationManager.Driver.FindElement(by);
+                return true;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
         }
 
     }
