@@ -17,30 +17,22 @@ namespace MantisTests.AppManager
 
         public void CreateProject(ProjectData project)
         {
-            if (CheckProjectExist(project))
-            {
-                return;
-            }
             _applicationManager.Navigation.OpenPage($"{_applicationManager.BaseURL}/manage_proj_create_page.php");
             _driver.FindElement(By.Id("project-name")).SendKeys(project.Name);
             SubmitConfirmForm("Добавить проект");
             SelectProject(project.Name);
         }
-
-        public void CreateProjectWithoutCheck(ProjectData project)
+        
+        public void CheckAndCreateProject(ProjectData project)
         {
-            _applicationManager.Navigation.OpenPage($"{_applicationManager.BaseURL}/manage_proj_create_page.php");
-            _driver.FindElement(By.Id("project-name")).SendKeys(project.Name);
-            SubmitConfirmForm("Добавить проект");
-            SelectProject(project.Name);
+            if (!CheckProjectExist(project))
+            {
+                CreateProject(project);
+            }
         }
 
         public void RemoveProject(ProjectData project)
         {
-            if (!CheckProjectExist(project))
-            {
-                CreateProjectWithoutCheck(project);
-            }
             _applicationManager.Navigation.OpenPage($"{_applicationManager.BaseURL}/manage_proj_page.php");
             OpenProjectDialog(project);
             _driver.FindElement(By.XPath($"//form[@id='manage-proj-update-form']/div/div[3]/button[2]")).Click();

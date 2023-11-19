@@ -19,6 +19,8 @@ namespace MantisTests.Tests.ProjectTests
             {
                 Name = "TestProject2",
             };
+
+            _applicationManager.Projects.CheckAndCreateProject(project);
             _applicationManager.Projects.RemoveProject(project);
             Assert.False(_applicationManager.Projects.CheckProjectExist(project));
         }
@@ -27,7 +29,7 @@ namespace MantisTests.Tests.ProjectTests
         public void ProjectRemovalTestCheckApi()
         {
             var oldProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
-            if (!oldProjectList.Any()) 
+            if (!oldProjectList.Any())
             {
                 _applicationManager.Projects.CreateProjectFromApi(_adminAccount, new ProjectData
                 {

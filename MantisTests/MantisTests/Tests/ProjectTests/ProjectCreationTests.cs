@@ -18,13 +18,14 @@ namespace MantisTests.Tests.ProjectTests
         {
             _project = new Models.ProjectData()
             {
-                Name = "TestProject5",
+                Name = Guid.NewGuid().ToString(),
             };
         }
 
         [Test]
         public void ProjectCreationTest()
         {
+            Assert.False(_applicationManager.Projects.CheckProjectExist(_project));
             _applicationManager.Projects.CreateProject(_project);
             Assert.True(_applicationManager.Projects.CheckProjectExist(_project));
         }
@@ -36,7 +37,7 @@ namespace MantisTests.Tests.ProjectTests
             var existingProject = oldProjectList.FirstOrDefault(p=>p.Name == _project.Name);
             Assert.True(existingProject == null);
 
-            _applicationManager.Projects.CreateProjectWithoutCheck(_project);
+            _applicationManager.Projects.CreateProject(_project);
 
             var newProjectList = _applicationManager.Projects.GetProjectsFromApi(_adminAccount);
             oldProjectList.Add(_project);
